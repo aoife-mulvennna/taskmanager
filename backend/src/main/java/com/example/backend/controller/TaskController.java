@@ -43,6 +43,7 @@ public class TaskController {
             task.setTitle(updatedTask.getTitle());
             task.setDescription(updatedTask.getDescription());
             task.setCompleted(updatedTask.isCompleted());
+            task.setImportance(updatedTask.getImportance());
             return repository.save(task);
         })
         .orElseThrow(() -> new RuntimeException("Task not found"));
@@ -51,5 +52,15 @@ public class TaskController {
     @DeleteMapping("/{id}")
     public void deleteTask(@PathVariable Long id){
         repository.deleteById(id);
+    }
+
+    @GetMapping("/count-tasks")
+    public long countNumberOfTasks(){
+        return repository.count();
+    }
+
+    @GetMapping("/count-tasks/completed")
+    public long countNumberOfTasksCompleted(){
+        return repository.countByCompletedTrue();
     }
 }
