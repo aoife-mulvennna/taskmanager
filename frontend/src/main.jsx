@@ -8,9 +8,10 @@ import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 
 const theme = createTheme({
   palette: {
-    mode: "light", // force light theme
+    mode: "light", 
   },
 });
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
