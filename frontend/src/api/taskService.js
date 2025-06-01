@@ -39,3 +39,13 @@ export async function deleteTask(id) {
     method: "DELETE",
   });
 }
+
+export async function countTasks() {
+    const res = await fetch(`${API_URL}/count-tasks`);
+    return handleResponse(res)
+}
+
+export async function countCompletedTasks() {
+    const res = await fetch(`${API_URL}/count-tasks/completed`);
+    return handleResponse(res)
+}

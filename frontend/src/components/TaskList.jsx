@@ -10,6 +10,7 @@ import {
   Box,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Checkbox from "@mui/material/Checkbox";
 
 function TaskList() {
   const [tasks, setTasks] = useState([]);
@@ -28,7 +29,7 @@ function TaskList() {
         console.error("Failed to fetch tasks:", err);
         setTasks([]);
       });
-  }, []); // using the empty array [] tells react to run the code once after the component mounts. without 
+  }, []); // using the empty array [] tells react to run the code once after the component mounts. without
 
   const handleAdd = async () => {
     if (!newTitle.trim()) return; // guard clause to ignore empty input ie whitespace. prevents submitting an empty task
@@ -46,7 +47,7 @@ function TaskList() {
     }
   };
 
-  const handleToggle = async (task) => {
+  const handleComplete = async (task) => {
     const updated = await updateTask(task.id, {
       ...task,
       completed: !task.completed,
@@ -59,9 +60,10 @@ function TaskList() {
     setTasks(tasks.filter((t) => t.id !== id));
   };
 
+  const label = { inputProps: { "aria-label": "Checkbox demo" } };
   return (
     <Box>
-      <Box display="flex" gap={2} mb={2} >
+      <Box display="flex" gap={2} mb={2}>
         <TextField
           label="New Task"
           variant="outlined"
@@ -73,8 +75,8 @@ function TaskList() {
           Add
         </Button>
       </Box>
-      <List sx={{mt:2}}>
-        {Array.isArray(tasks) &&
+      <List sx={{ mt: 2 }}>
+        {Array.isArray(tasks) && tasks.length > 0 ? (
           tasks.map((task) => (
             <ListItem
               key={task.id}
@@ -83,9 +85,12 @@ function TaskList() {
                   <DeleteIcon />
                 </IconButton>
               }
-              button
-              onClick={() => handleToggle(task)}
             >
+              <Checkbox
+                checked={task.completed} // uses the variable (it is checked if completed = true)
+                onChange={() => handleComplete(task)}
+                inputProps={{ "aria-label": "controlled" }}
+              />
               <ListItemText
                 primary={task?.title ?? "Untitled"}
                 sx={{
@@ -93,8 +98,10 @@ function TaskList() {
                 }}
               />
             </ListItem>
-          ))}
+          ))) : (<ListItemText primary="You have no tasks yet. Add some above!" sx={{justifyContent:"center"}} /> )
+        }
       </List>
+      
     </Box>
   );
 }
